@@ -1,37 +1,72 @@
--- SXN CASTLE 👑 ELITE V51 (SPEED CLICKER REINFORCED)
+-- SXN CASTLE 👑 ELITE V53 (GOLD EDITION)
 local UI_NAME, SUB_NAME = "Sxn Castle 👑", "South Bronx Special"
 local Players = game:GetService("Players")
 local RS = game:GetService("RunService")
 local UIS = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
 local LP = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
-if game:GetService("CoreGui"):FindFirstChild("SxnV51") then game:GetService("CoreGui").SxnV51:Destroy() end
+if game:GetService("CoreGui"):FindFirstChild("SxnV53") then game:GetService("CoreGui").SxnV53:Destroy() end
 
 local Aim, Hit, Esp, SpeedClicker = false, false, false, false
 local Holding, HSize, MaxDist = false, 4, 800
+local Target = nil
 
-local sg = Instance.new("ScreenGui", game:GetService("CoreGui")); sg.Name = "SxnV51"
+local sg = Instance.new("ScreenGui", game:GetService("CoreGui")); sg.Name = "SxnV53"
 
--- MENU NEÓN (Legible y Notable)
+-- INTRO WOW (ELEGANTE Y LIMPIA)
+local IntroFrame = Instance.new("Frame", sg)
+IntroFrame.Size = UDim2.new(0, 320, 0, 180)
+IntroFrame.Position = UDim2.new(0.5, -160, 0.5, -90)
+IntroFrame.BackgroundColor3 = Color3.fromRGB(5, 5, 5)
+IntroFrame.BorderSizePixel = 0
+local iCorner = Instance.new("UICorner", IntroFrame); iCorner.CornerRadius = UDim.new(0, 20)
+local iStroke = Instance.new("UIStroke", IntroFrame); iStroke.Color = Color3.new(1, 0, 0); iStroke.Thickness = 2
+
+local Welcome = Instance.new("TextLabel", IntroFrame)
+Welcome.Size = UDim2.new(1, 0, 0, 40); Welcome.Position = UDim2.new(0, 0, 0, 30)
+Welcome.Text = "Welcome To Castle Of Cheat 📛"; Welcome.TextColor3 = Color3.new(1, 1, 1)
+Welcome.Font = "GothamBold"; Welcome.TextSize = 16; Welcome.BackgroundTransparency = 1
+
+local Creator = Instance.new("TextLabel", IntroFrame)
+Creator.Size = UDim2.new(1, 0, 0, 30); Creator.Position = UDim2.new(0, 0, 0, 70)
+Creator.Text = "👑 Creator by Sxn"; Creator.TextColor3 = Color3.fromRGB(255, 215, 0)
+Creator.Font = "GothamBold"; Creator.TextSize = 14; Creator.BackgroundTransparency = 1
+
+local UserDC = Instance.new("TextLabel", IntroFrame)
+UserDC.Size = UDim2.new(1, 0, 0, 30); UserDC.Position = UDim2.new(0, 0, 0, 100)
+UserDC.Text = "💳 fakesxn (username DC)"; UserDC.TextColor3 = Color3.fromRGB(200, 200, 200)
+UserDC.Font = "GothamBold"; UserDC.TextSize = 12; UserDC.BackgroundTransparency = 1
+
+task.spawn(function()
+    IntroFrame.BackgroundTransparency = 1; Welcome.TextTransparency = 1; Creator.TextTransparency = 1; UserDC.TextTransparency = 1; iStroke.Transparency = 1
+    TweenService:Create(IntroFrame, TweenInfo.new(1), {BackgroundTransparency = 0.1}):Play()
+    TweenService:Create(iStroke, TweenInfo.new(1), {Transparency = 0}):Play()
+    TweenService:Create(Welcome, TweenInfo.new(1), {TextTransparency = 0}):Play()
+    task.wait(0.5)
+    TweenService:Create(Creator, TweenInfo.new(1), {TextTransparency = 0}):Play()
+    task.wait(0.5)
+    TweenService:Create(UserDC, TweenInfo.new(1), {TextTransparency = 0}):Play()
+    task.wait(3)
+    TweenService:Create(IntroFrame, TweenInfo.new(1), {Size = UDim2.new(0,0,0,0), Position = UDim2.new(0.5,0,0.5,0), BackgroundTransparency = 1}):Play()
+    TweenService:Create(Welcome, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
+    TweenService:Create(Creator, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
+    TweenService:Create(UserDC, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
+    task.wait(1); IntroFrame:Destroy()
+end)
+
+-- MENU NEÓN (SIN CAMBIOS EN BOTONES)
 local Main = Instance.new("Frame", sg); Main.Size = UDim2.new(0, 215, 0, 380); Main.Position = UDim2.new(0.1, 0, 0.3, 0)
 Main.BackgroundColor3 = Color3.fromRGB(8, 8, 8); Main.Active = true; Main.Draggable = true; Instance.new("UICorner", Main)
-local MainStroke = Instance.new("UIStroke", Main); MainStroke.Color = Color3.new(1, 0, 0); MainStroke.Thickness = 2.2; MainStroke.Transparency = 0.4
+local MainStroke = Instance.new("UIStroke", Main); MainStroke.Color = Color3.new(1, 0, 0); MainStroke.Thickness = 2.2
 
 local Top = Instance.new("Frame", Main); Top.Size = UDim2.new(1, 0, 0, 55); Top.BackgroundColor3 = Color3.fromRGB(15, 15, 15); Top.BorderSizePixel = 0; Instance.new("UICorner", Top)
 local Title = Instance.new("TextLabel", Top); Title.Size = UDim2.new(1, 0, 0, 25); Title.Position = UDim2.new(0, 12, 0, 8); Title.Text = UI_NAME; Title.TextColor3 = Color3.new(1, 1, 1); Title.Font = "GothamBold"; Title.TextSize = 17; Title.TextXAlignment = "Left"; Title.BackgroundTransparency = 1
 local Sub = Instance.new("TextLabel", Top); Sub.Size = UDim2.new(1, 0, 0, 15); Sub.Position = UDim2.new(0, 12, 0, 28); Sub.Text = SUB_NAME; Sub.TextColor3 = Color3.fromRGB(200, 200, 200); Sub.Font = "GothamBold"; Sub.TextSize = 11; Sub.TextXAlignment = "Left"; Sub.BackgroundTransparency = 1
 
-local Close = Instance.new("TextButton", Top); Close.Size = UDim2.new(0, 30, 0, 30); Close.Position = UDim2.new(1, -35, 0, 12); Close.Text = "×"; Close.TextColor3 = Color3.new(1,0,0); Close.BackgroundTransparency = 1; Close.TextSize = 25; Close.MouseButton1Click:Connect(function() sg:Destroy() end)
-local Min = Instance.new("TextButton", Top); Min.Size = UDim2.new(0, 30, 0, 30); Min.Position = UDim2.new(1, -65, 0, 12); Min.Text = "-"; Min.TextColor3 = Color3.new(1,1,1); Min.BackgroundTransparency = 1; Min.TextSize = 25
-
 local Container = Instance.new("ScrollingFrame", Main); Container.Size = UDim2.new(1, -16, 1, -70); Container.Position = UDim2.new(0, 8, 0, 60); Container.BackgroundTransparency = 1; Container.ScrollBarThickness = 0
 local List = Instance.new("UIListLayout", Container); List.Padding = UDim.new(0, 8)
-
-Min.MouseButton1Click:Connect(function()
-    Container.Visible = not Container.Visible
-    Main:TweenSize(Container.Visible and UDim2.new(0, 215, 0, 380) or UDim2.new(0, 215, 0, 55), "Out", "Quad", 0.25)
-end)
 
 local function AddButton(txt, callback)
     local btn = Instance.new("TextButton", Container); btn.Size = UDim2.new(1, 0, 0, 42); btn.Text = txt; btn.BackgroundColor3 = Color3.fromRGB(25, 25, 25); btn.TextColor3 = Color3.fromRGB(180, 180, 180); btn.Font = "GothamBold"; btn.TextSize = 12; Instance.new("UICorner", btn)
@@ -40,69 +75,42 @@ local function AddButton(txt, callback)
         local active = callback()
         btn.TextColor3 = active and Color3.new(1, 1, 1) or Color3.fromRGB(180, 180, 180)
         s.Color = active and Color3.new(1, 0, 0) or Color3.fromRGB(50, 50, 50)
-        s.Transparency = active and 0 or 0.5
     end)
     return btn
 end
 
--- ACTIVADORES (TODO SIGUE AQUÍ)
 AddButton("Aimbot Head Snap", function() Aim = not Aim; return Aim end)
 AddButton("Hitbox Cabezota (4)", function() Hit = not Hit; return Hit end)
 AddButton("ESP Notable (Armas)", function() Esp = not Esp; return Esp end)
 AddButton("Speed Clicker (X3)", function() SpeedClicker = not SpeedClicker; return SpeedClicker end)
 
--- MOTOR PRINCIPAL (ARREGLADO Y CONFIGURADO)
-RS.Heartbeat:Connect(function()
-    -- Speed Clicker: Dispara súper rápido solo al dejar presionado
-    if SpeedClicker and Holding then
-        local tool = LP.Character:FindFirstChildOfClass("Tool")
-        if tool then
-            tool:Activate() -- Simulación de click ráfaga
-            -- Balas Infinitas (Silent Fix)
-            for _, v in pairs(tool:GetDescendants()) do
-                if (v:IsA("IntValue") or v:IsA("NumberValue")) and v.Name:find("Ammo") then v.Value = 999 end
-            end
-        end
-    end
-end)
-
-RS.RenderStepped:Connect(function()
+-- LÓGICA AIMBOT STICKY Y ESP
+local function GetClosest()
+    local target, dist = nil, MaxDist
     for _, p in pairs(Players:GetPlayers()) do
         if p ~= LP and p.Character and p.Character:FindFirstChild("Head") and p.Character.Humanoid.Health > 0 then
-            local char = p.Character
-            local head = char.Head
-            local dist = (head.Position - LP.Character.Head.Position).Magnitude
-            
-            -- ESP TACTICAL (Visible notable tras paredes)
-            if Esp then
-                local bGui = head:FindFirstChild("SxnLabels") or Instance.new("BillboardGui", head)
-                bGui.Name = "SxnLabels"; bGui.AlwaysOnTop = true; bGui.Size = UDim2.new(0, 120, 0, 60); bGui.Adornee = head
-                
-                local txt = bGui:FindFirstChild("Info") or Instance.new("TextLabel", bGui)
-                txt.Name = "Info"; txt.Size = UDim2.new(1, 0, 1, 0); txt.BackgroundTransparency = 1; txt.Font = "GothamBold"
-                txt.TextSize = 12; txt.TextStrokeTransparency = 0; txt.TextStrokeColor3 = Color3.new(0, 0, 0)
-                
-                local currentTool = char:FindFirstChildOfClass("Tool") and char:FindFirstChildOfClass("Tool").Name or "Nada"
-                txt.Text = "[" .. math.floor(dist) .. "m]\n" .. currentTool
-                txt.TextColor3 = (dist < 25) and Color3.new(1, 0, 0) or Color3.new(1, 1, 1)
-            elseif head:FindFirstChild("SxnLabels") then head.SxnLabels:Destroy() end
-            
-            -- HITBOX REAL
-            if Hit then
-                head.Size = Vector3.new(HSize, HSize, HSize); head.Transparency = 0.5; head.CanCollide = false
-            else
-                head.Size = Vector3.new(1, 1, 1); head.Transparency = 0; head.CanCollide = true
-            end
-            
-            -- AIMBOT INDEPENDIENTE
-            if Aim and Holding and dist < MaxDist then
-                local _, vis = Camera:WorldToViewportPoint(head.Position)
-                if vis then Camera.CFrame = CFrame.lookAt(Camera.CFrame.Position, head.Position) end
-            end
+            local d = (p.Character.Head.Position - LP.Character.Head.Position).Magnitude
+            if d < dist then target = p; dist = d end
         end
     end
-end)
+    return target
+end
 
--- ENTRADA MÓVIL
-UIS.InputBegan:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then Holding = true end end)
-UIS.InputEnded:Connect(function(i) if i.UserInputType == Enum.UserInputType.MouseButton1 or i.UserInputType == Enum.UserInputType.Touch then Holding = false end end)
+RS.RenderStepped:Connect(function()
+    if Aim and Holding then
+        if not Target or not Target.Character or not Target.Character:FindFirstChild("Head") or Target.Character.Humanoid.Health <= 0 then
+            Target = GetClosest()
+        end
+        if Target then
+            Camera.CFrame = CFrame.lookAt(Camera.CFrame.Position, Target.Character.Head.Position)
+        end
+    else
+        Target = nil
+    end
+
+    for _, p in pairs(Players:GetPlayers()) do
+        if p ~= LP and p.Character and p.Character:FindFirstChild("Head") then
+            local head = p.Character.Head
+            if Esp and p.Character.Humanoid.Health > 0 then
+                local bGui = head:FindFirstChild("SxnLabels") or Instance.new("BillboardGui", head)
+                bGui.Name = "SxnLabels"; bGui.AlwaysOnTop = true; bGui.
