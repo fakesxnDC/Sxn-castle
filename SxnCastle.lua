@@ -1,116 +1,58 @@
--- SXN CASTLE 👑 ELITE V53 (GOLD EDITION)
-local UI_NAME, SUB_NAME = "Sxn Castle 👑", "Mobile Cheat"
-local Players = game:GetService("Players")
-local RS = game:GetService("RunService")
-local UIS = game:GetService("UserInputService")
-local TweenService = game:GetService("TweenService")
-local LP = Players.LocalPlayer
-local Camera = workspace.CurrentCamera
+local P,RS,UIS,LP,Cam=game:GetService("Players"),game:GetService("RunService"),game:GetService("UserInputService"),game:GetService("Players").LocalPlayer,workspace.CurrentCamera
+local Aim,Hit,Esp,SC,Hold,Target,Neon,CanClip,Cooldown=false,false,false,false,false,nil,Color3.fromRGB(180,0,255),true,3.5
+local Old=game:GetService("CoreGui"):FindFirstChild("SxnV62") or LP.PlayerGui:FindFirstChild("SxnV62")
+if Old then Old:Destroy() end
 
-if game:GetService("CoreGui"):FindFirstChild("SxnV53") then game:GetService("CoreGui").SxnV53:Destroy() end
+local sg=Instance.new("ScreenGui",game:GetService("CoreGui") or LP.PlayerGui);sg.Name="SxnV62";sg.ResetOnSpawn=false
+local function Create(cls,props,par) local i=Instance.new(cls,par);for k,v in pairs(props)do i[k]=v end;return i end
 
-local Aim, Hit, Esp, SpeedClicker = false, false, false, false
-local Holding, HSize, MaxDist = false, 4, 800
-local Target = nil
+local F=Create("Frame",{Size=UDim2.new(0,320,0,180),Position=UDim2.new(0.5,-160,0.5,-90),BackgroundColor3=Color3.new(0,0,0)},sg);Create("UICorner",{},F);Create("UIStroke",{Color=Neon},F)
+local T1=Create("TextLabel",{Size=UDim2.new(1,0,0,40),Position=UDim2.new(0,0,0,30),Text="Welcome To Castle Of Cheat 📛",TextColor3=Color3.new(1,1,1),Font="GothamBold",BackgroundTransparency=1},F)
+local T2=Create("TextLabel",{Size=UDim2.new(1,0,0,30),Position=UDim2.new(0,0,0,70),Text="👑 Creator by Trincheras Shop",TextColor3=Neon,Font="GothamBold",BackgroundTransparency=1},F)
+local T3=Create("TextLabel",{Size=UDim2.new(1,0,0,30),Position=UDim2.new(0,0,0,100),Text="💳 fakesxn (username DC)",TextColor3=Color3.new(0.8,0.8,0.8),Font="GothamBold",BackgroundTransparency=1},F)
 
-local sg = Instance.new("ScreenGui", game:GetService("CoreGui")); sg.Name = "SxnV53"
+local M=Create("Frame",{Size=UDim2.new(0,215,0,420),Position=UDim2.new(0.1,0,0.3,0),BackgroundColor3=Color3.fromRGB(10,10,10),Active=true,Draggable=true,Visible=false},sg);Create("UICorner",{},M);Create("UIStroke",{Color=Neon},M)
+local Ti=Create("TextLabel",{Size=UDim2.new(1,0,0,50),Text="🌪 SILENT XITER",TextColor3=Neon,Font="GothamBold",TextSize=22,BackgroundTransparency=1},M)
+local Min=Create("TextButton",{Size=UDim2.new(0,30,0,30),Position=UDim2.new(1,-35,0,10),Text="-",TextColor3=Neon,BackgroundTransparency=1,TextSize=25},M)
+local C=Create("ScrollingFrame",{Size=UDim2.new(1,-16,1,-70),Position=UDim2.new(0,8,0,60),BackgroundTransparency=1,ScrollBarThickness=2},M);Create("UIListLayout",{Padding=UDim.new(0,6)},C)
 
--- INTRO WOW (ELEGANTE Y LIMPIA)
-local IntroFrame = Instance.new("Frame", sg)
-IntroFrame.Size = UDim2.new(0, 320, 0, 180)
-IntroFrame.Position = UDim2.new(0.5, -160, 0.5, -90)
-IntroFrame.BackgroundColor3 = Color3.fromRGB(5, 5, 5)
-IntroFrame.BorderSizePixel = 0
-local iCorner = Instance.new("UICorner", IntroFrame); iCorner.CornerRadius = UDim.new(0, 20)
-local iStroke = Instance.new("UIStroke", IntroFrame); iStroke.Color = Color3.new(1, 0, 0); iStroke.Thickness = 2
+task.spawn(function() task.wait(3.5);F:TweenSize(UDim2.new(0,0,0,0),"Out","Quad",0.5,true);task.wait(0.5);F:Destroy();M.Visible=true end)
+Min.MouseButton1Click:Connect(function() C.Visible=not C.Visible;M:TweenSize(C.Visible and UDim2.new(0,215,0,420) or UDim2.new(0,215,0,55),"Out","Quad",0.3,true) end)
 
-local Welcome = Instance.new("TextLabel", IntroFrame)
-Welcome.Size = UDim2.new(1, 0, 0, 40); Welcome.Position = UDim2.new(0, 0, 0, 30)
-Welcome.Text = "Welcome To Castle Of Cheat 📛"; Welcome.TextColor3 = Color3.new(1, 1, 1)
-Welcome.Font = "GothamBold"; Welcome.TextSize = 16; Welcome.BackgroundTransparency = 1
-
-local Creator = Instance.new("TextLabel", IntroFrame)
-Creator.Size = UDim2.new(1, 0, 0, 30); Creator.Position = UDim2.new(0, 0, 0, 70)
-Creator.Text = "👑 Creator by Sxn"; Creator.TextColor3 = Color3.fromRGB(255, 215, 0)
-Creator.Font = "GothamBold"; Creator.TextSize = 14; Creator.BackgroundTransparency = 1
-
-local UserDC = Instance.new("TextLabel", IntroFrame)
-UserDC.Size = UDim2.new(1, 0, 0, 30); UserDC.Position = UDim2.new(0, 0, 0, 100)
-UserDC.Text = "💳 fakesxn (username DC)"; UserDC.TextColor3 = Color3.fromRGB(200, 200, 200)
-UserDC.Font = "GothamBold"; UserDC.TextSize = 12; UserDC.BackgroundTransparency = 1
-
-task.spawn(function()
-    IntroFrame.BackgroundTransparency = 1; Welcome.TextTransparency = 1; Creator.TextTransparency = 1; UserDC.TextTransparency = 1; iStroke.Transparency = 1
-    TweenService:Create(IntroFrame, TweenInfo.new(1), {BackgroundTransparency = 0.1}):Play()
-    TweenService:Create(iStroke, TweenInfo.new(1), {Transparency = 0}):Play()
-    TweenService:Create(Welcome, TweenInfo.new(1), {TextTransparency = 0}):Play()
-    task.wait(0.5)
-    TweenService:Create(Creator, TweenInfo.new(1), {TextTransparency = 0}):Play()
-    task.wait(0.5)
-    TweenService:Create(UserDC, TweenInfo.new(1), {TextTransparency = 0}):Play()
-    task.wait(3)
-    TweenService:Create(IntroFrame, TweenInfo.new(1), {Size = UDim2.new(0,0,0,0), Position = UDim2.new(0.5,0,0.5,0), BackgroundTransparency = 1}):Play()
-    TweenService:Create(Welcome, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
-    TweenService:Create(Creator, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
-    TweenService:Create(UserDC, TweenInfo.new(0.5), {TextTransparency = 1}):Play()
-    task.wait(1); IntroFrame:Destroy()
-end)
-
--- MENU NEÓN (SIN CAMBIOS EN BOTONES)
-local Main = Instance.new("Frame", sg); Main.Size = UDim2.new(0, 215, 0, 380); Main.Position = UDim2.new(0.1, 0, 0.3, 0)
-Main.BackgroundColor3 = Color3.fromRGB(8, 8, 8); Main.Active = true; Main.Draggable = true; Instance.new("UICorner", Main)
-local MainStroke = Instance.new("UIStroke", Main); MainStroke.Color = Color3.new(1, 0, 0); MainStroke.Thickness = 2.2
-
-local Top = Instance.new("Frame", Main); Top.Size = UDim2.new(1, 0, 0, 55); Top.BackgroundColor3 = Color3.fromRGB(15, 15, 15); Top.BorderSizePixel = 0; Instance.new("UICorner", Top)
-local Title = Instance.new("TextLabel", Top); Title.Size = UDim2.new(1, 0, 0, 25); Title.Position = UDim2.new(0, 12, 0, 8); Title.Text = UI_NAME; Title.TextColor3 = Color3.new(1, 1, 1); Title.Font = "GothamBold"; Title.TextSize = 17; Title.TextXAlignment = "Left"; Title.BackgroundTransparency = 1
-local Sub = Instance.new("TextLabel", Top); Sub.Size = UDim2.new(1, 0, 0, 15); Sub.Position = UDim2.new(0, 12, 0, 28); Sub.Text = SUB_NAME; Sub.TextColor3 = Color3.fromRGB(200, 200, 200); Sub.Font = "GothamBold"; Sub.TextSize = 11; Sub.TextXAlignment = "Left"; Sub.BackgroundTransparency = 1
-
-local Container = Instance.new("ScrollingFrame", Main); Container.Size = UDim2.new(1, -16, 1, -70); Container.Position = UDim2.new(0, 8, 0, 60); Container.BackgroundTransparency = 1; Container.ScrollBarThickness = 0
-local List = Instance.new("UIListLayout", Container); List.Padding = UDim.new(0, 8)
-
-local function AddButton(txt, callback)
-    local btn = Instance.new("TextButton", Container); btn.Size = UDim2.new(1, 0, 0, 42); btn.Text = txt; btn.BackgroundColor3 = Color3.fromRGB(25, 25, 25); btn.TextColor3 = Color3.fromRGB(180, 180, 180); btn.Font = "GothamBold"; btn.TextSize = 12; Instance.new("UICorner", btn)
-    local s = Instance.new("UIStroke", btn); s.Color = Color3.fromRGB(50, 50, 50); s.Thickness = 1.5
-    btn.MouseButton1Click:Connect(function()
-        local active = callback()
-        btn.TextColor3 = active and Color3.new(1, 1, 1) or Color3.fromRGB(180, 180, 180)
-        s.Color = active and Color3.new(1, 0, 0) or Color3.fromRGB(50, 50, 50)
-    end)
-    return btn
+local function AddB(t,cb)
+    local b=Create("TextButton",{Size=UDim2.new(1,0,0,40),Text=t,BackgroundColor3=Color3.fromRGB(25,25,25),TextColor3=Color3.new(1,1,1),Font="GothamBold",TextSize=13},C);Create("UICorner",{},b)
+    b.MouseButton1Click:Connect(function() local a=cb() b.TextColor3=a and Neon or Color3.new(1,1,1) end)
 end
 
-AddButton("Aimbot Head Snap", function() Aim = not Aim; return Aim end)
-AddButton("Hitbox Cabezota (4)", function() Hit = not Hit; return Hit end)
-AddButton("ESP Notable (Armas)", function() Esp = not Esp; return Esp end)
-AddButton("Speed Clicker (X3)", function() SpeedClicker = not SpeedClicker; return SpeedClicker end)
+local function DoClip() if CanClip and LP.Character and LP.Character:FindFirstChild("HumanoidRootPart") then CanClip=false;LP.Character.HumanoidRootPart.CFrame+=LP.Character.HumanoidRootPart.CFrame.LookVector*6.5;task.wait(Cooldown);CanClip=true end end
 
--- LÓGICA AIMBOT STICKY Y ESP
-local function GetClosest()
-    local target, dist = nil, MaxDist
-    for _, p in pairs(Players:GetPlayers()) do
-        if p ~= LP and p.Character and p.Character:FindFirstChild("Head") and p.Character.Humanoid.Health > 0 then
-            local d = (p.Character.Head.Position - LP.Character.Head.Position).Magnitude
-            if d < dist then target = p; dist = d end
-        end
-    end
-    return target
-end
+AddB("Aimbot Head (Elite)",function() Aim=not Aim return Aim end)
+AddB("Hitbox Invisible",function() Hit=not Hit return Hit end)
+AddB("ESP Neon Names",function() Esp=not Esp return Esp end)
+AddB("AutoClicker X20",function() SC=not SC return SC end)
+AddB("Wall-Clip (Mobile/PC)",function() DoClip() return true end)
+AddB("Boost FPS",function() for _,v in pairs(game:GetDescendants())do if v:IsA("Texture")or v:IsA("Decal")then v.Transparency=1 elseif v:IsA("BasePart")then v.Material=Enum.Material.Plastic end end return true end)
 
 RS.RenderStepped:Connect(function()
-    if Aim and Holding then
-        if not Target or not Target.Character or not Target.Character:FindFirstChild("Head") or Target.Character.Humanoid.Health <= 0 then
-            Target = GetClosest()
+    if Aim and Hold then
+        if not (Target and Target.Character and Target.Character:FindFirstChild("Humanoid") and Target.Character.Humanoid.Health>0) then
+            local cl,di=nil,180
+            for _,p in pairs(P:GetPlayers())do if p~=LP and p.Character and p.Character:FindFirstChild("Head") and p.Character.Humanoid.Health>0 then local d=(p.Character.Head.Position-LP.Character.Head.Position).Magnitude;if d<di then cl=p;di=d end end end
+            Target=cl
         end
-        if Target then
-            Camera.CFrame = CFrame.lookAt(Camera.CFrame.Position, Target.Character.Head.Position)
-        end
-    else
-        Target = nil
-    end
+        if Target then Cam.CFrame=CFrame.lookAt(Cam.CFrame.Position,Target.Character.Head.Position+Vector3.new(0,0.22,0)) end
+    else Target=nil end
+    for _,p in pairs(P:GetPlayers())do if p~=LP and p.Character and p.Character:FindFirstChild("Head") then
+        local h,hum=p.Character.Head,p.Character.Humanoid
+        if Esp and hum.Health>0 then
+            local b=h:FindFirstChild("SxnL") or Create("BillboardGui",{Name="SxnL",AlwaysOnTop=true,Size=UDim2.new(0,100,0,40),ExtentsOffset=Vector3.new(0,3,0)},h)
+            local t=b:FindFirstChild("I") or Create("TextLabel",{Name="I",Size=UDim2.new(1,0,1,0),BackgroundTransparency=1,TextColor3=Neon,Font="GothamBold",TextSize=10},b)
+            t.Text=p.Name.."\n"..math.floor((h.Position-LP.Character.Head.Position).Magnitude).."m"
+        elseif h:FindFirstChild("SxnL") then h.SxnL:Destroy() end
+        if Hit and hum.Health>0 then h.Size=Vector3.new(4,4,4);h.Transparency=0.7;h.Material=Enum.Material.ForceField;h.Color=Neon else h.Size=Vector3.new(1,1,1);h.Transparency=0;h.Material=Enum.Material.Plastic end
+    end end
+end)
 
-    for _, p in pairs(Players:GetPlayers()) do
-        if p ~= LP and p.Character and p.Character:FindFirstChild("Head") then
-            local head = p.Character.Head
-            if Esp and p.Character.Humanoid.Health > 0 then
-                local bGui = head:FindFirstChild("SxnLabels") or Instance.new("BillboardGui", head)
-                bGui.Name = "SxnLabels"; bGui.AlwaysOnTop = true; bGui.
+task.spawn(function() while task.wait(0.01)do if SC and Hold and LP.Character:FindFirstChildOfClass("Tool")then for i=1,20 do LP.Character:FindFirstChildOfClass("Tool"):Activate() end end end end)
+UIS.InputBegan:Connect(function(i,g) if g then return end if i.UserInputType==Enum.UserInputType.MouseButton1 or i.UserInputType==Enum.UserInputType.Touch then Hold=true end if i.KeyCode==Enum.KeyCode.V then DoClip() end end)
+UIS.InputEnded:Connect(function(i) if i.UserInputType==Enum.UserInputType.MouseButton1 or i.UserInputType==Enum.UserInputType.Touch then Hold=false end end)
